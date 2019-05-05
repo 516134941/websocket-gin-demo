@@ -40,6 +40,7 @@ func (h *Hub) Run() {
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
+				delete(h.roomID, client)
 				close(client.send)
 			}
 		case message := <-h.broadcast:
