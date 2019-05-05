@@ -1,5 +1,7 @@
 package server
 
+import "strings"
+
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -40,15 +42,23 @@ func (h *Hub) Run() {
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
+				delete(h.roomID, client)
 				close(client.send)
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
-				select {
-				case client.send <- message:
-				default:
-					close(client.send)
-					delete(h.clients, client)
+				// 使用“&”对message进行message切割 获取房间号
+				// 向信息所属的房间内的所有client 内添加send
+				// msg[0]为房间号 msg[1]为打印内容
+				msg := strings.Split(string(message), "&")
+				if string(client.roomID) == msg[0] {
+					select {
+					case client.send <- []byte(msg[1]):
+					default:
+						close(client.send)
+						delete(h.clients, client)
+						delete(h.roomID, client)
+					}
 				}
 			}
 		}

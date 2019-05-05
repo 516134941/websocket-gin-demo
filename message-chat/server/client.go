@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"strings"
 
 	"net/http"
 	"time"
@@ -110,10 +109,11 @@ func (c *Client) writePump() {
 			// 使用“&”分割获取房间号
 			// 聊天内容不得包含&字符
 			// msg[0]为房间号 msg[1]为打印内容
-			msg := strings.Split(string(message), "&")
-			if msg[0] == string(c.hub.roomID[c]) {
-				w.Write([]byte(msg[1]))
-			}
+			// msg := strings.Split(string(message), "&")
+			// if msg[0] == string(c.hub.roomID[c]) {
+			// 	w.Write([]byte(msg[1]))
+			// }
+			w.Write(message)
 			// Add queued chat messages to the current websocket message.
 			// n := len(c.send)
 			// for i := 0; i < n; i++ {
