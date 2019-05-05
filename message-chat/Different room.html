@@ -26,7 +26,7 @@ window.onload = function () {
         return false;
     };
     if (window["WebSocket"]) {
-        conn = new WebSocket("ws://" + "localhost:8999" + "/ws");
+        conn = new WebSocket("ws://" + "localhost:8009" + "/ws?user_name=三号用户&room_id=aaaa");
         conn.onclose = function (evt) {
             var item = document.createElement("div");
             item.innerHTML = "<b>Connection closed.</b>";

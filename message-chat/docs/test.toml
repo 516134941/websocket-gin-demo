@@ -1,0 +1,8 @@
+listen = ":8009"
+# Redis数据库配置
+[redisservers]
+    # token口令数据库
+    [redisservers.test]
+    addr = "127.0.0.1:6379"
+    password = ""
+    db = 0
